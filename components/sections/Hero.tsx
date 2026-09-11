@@ -1,13 +1,10 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { FiArrowDown, FiDownload, FiArrowUpRight } from 'react-icons/fi';
 import MagneticButton from '@/components/MagneticButton';
 import { RESUME_URL } from '@/lib/site';
-
-const Scene = dynamic(() => import('@/components/Scene'), { ssr: false });
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -20,7 +17,7 @@ const item = {
   show: { opacity: 1, y: 0, transition: { duration: 0.9, ease } },
 };
 
-export default function Hero({ ready }: { ready: boolean }) {
+export default function Hero() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -38,11 +35,6 @@ export default function Hero({ ready }: { ready: boolean }) {
       ref={ref}
       className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-5"
     >
-      {/* 3D scene backdrop */}
-      <div className="absolute inset-0 z-0">
-        {ready && <Scene />}
-      </div>
-
       {/* Atmospheric overlays */}
       <div className="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_center,transparent_30%,#050505_82%)]" />
       <div className="pointer-events-none absolute inset-0 z-10 bg-grid opacity-[0.04]" />
@@ -67,11 +59,17 @@ export default function Hero({ ready }: { ready: boolean }) {
 
           <motion.h1
             variants={item}
-            className="font-display text-5xl font-bold leading-[0.95] tracking-tight text-white sm:text-7xl md:text-8xl"
+            className="flex items-center justify-center gap-3 font-display text-5xl font-bold leading-[0.95] tracking-tight text-white sm:gap-5 sm:text-7xl md:gap-7 md:text-8xl"
           >
-            DAYAN
-            <br />
-            KHAN
+            <span>DAYAN</span>
+            <span className="relative inline-flex h-20 w-16 shrink-0 rotate-[-4deg] overflow-hidden rounded-[2rem] border border-white/20 bg-white/10 shadow-2xl shadow-black/40 sm:h-28 sm:w-24 md:h-36 md:w-28">
+              <img
+                src="/WhatsApp_Image_2026-07-24_at_12.34.43_AM.jpeg"
+                alt="Dayan Khan"
+                className="h-full w-full object-cover object-center"
+              />
+            </span>
+            <span>KHAN</span>
           </motion.h1>
 
           <motion.p

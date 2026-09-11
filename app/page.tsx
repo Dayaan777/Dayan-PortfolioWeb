@@ -24,7 +24,7 @@ export default function Home() {
       <Navbar />
 
       <main className="relative">
-        <Hero ready={loaded} />
+        <Hero />
         <Marquee />
         <Projects />
         <About />
