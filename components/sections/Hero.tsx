@@ -36,10 +36,10 @@ export default function Hero() {
       className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-5"
     >
       {/* Atmospheric overlays */}
-      <div className="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_center,transparent_30%,#050505_82%)]" />
+      <div className="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_center,transparent_30%,hsl(var(--background))_82%)]" />
       <div className="pointer-events-none absolute inset-0 z-10 bg-grid opacity-[0.04]" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-32 bg-gradient-to-b from-[#050505] to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-40 bg-gradient-to-t from-[#050505] to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-32 bg-gradient-to-b from-background to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-40 bg-gradient-to-t from-background to-transparent" />
 
       <motion.div
         style={{ y: yText, opacity, scale }}

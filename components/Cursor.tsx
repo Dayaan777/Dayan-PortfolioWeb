@@ -60,7 +60,7 @@ export default function Cursor() {
           height: size.height,
           opacity: visible ? 1 : 0,
           backgroundColor:
-            variant === 'view' ? 'rgba(160,40,77,0.18)' : 'rgba(255,255,255,0.04)',
+            variant === 'view' ? 'hsl(var(--accent) / 0.18)' : 'rgba(255,255,255,0.04)',
         }}
         transition={{ type: 'spring', mass: 0.3, stiffness: 600, damping: 34 }}
       >

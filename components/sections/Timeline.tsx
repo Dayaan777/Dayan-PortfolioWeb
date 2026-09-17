@@ -31,7 +31,7 @@ function TimelineItem({ entry, index }: { entry: (typeof timeline)[number]; inde
       >
         <div className="relative flex h-3 w-3 items-center justify-center">
           <span className="absolute h-full w-full rounded-full bg-accent-hover/40 blur-[6px]" />
-          <span className="relative h-3 w-3 rounded-full border-2 border-accent-hover bg-[#050505]" />
+          <span className="relative h-3 w-3 rounded-full border-2 border-accent-hover bg-background" />
         </div>
       </motion.div>
 

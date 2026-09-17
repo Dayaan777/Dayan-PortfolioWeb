@@ -49,7 +49,7 @@ export default function Navbar() {
         <nav
           className={`flex w-full max-w-5xl items-center justify-between rounded-2xl border px-4 py-2.5 transition-all duration-500 ${
             scrolled
-              ? 'border-white/10 bg-[#0a0a0a]/80 backdrop-blur-xl'
+              ? 'border-white/10 bg-background/80 backdrop-blur-xl'
               : 'border-transparent bg-transparent'
           }`}
         >
@@ -108,7 +108,7 @@ export default function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[88] bg-[#050505]/95 backdrop-blur-xl md:hidden"
+            className="fixed inset-0 z-[88] bg-background/95 backdrop-blur-xl md:hidden"
           >
             <div className="flex flex-col gap-2 px-6 pt-28">
               {links.map((l, i) => (

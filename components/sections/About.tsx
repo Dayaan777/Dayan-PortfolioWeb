@@ -47,7 +47,7 @@ export default function About() {
                 className="h-full w-full object-cover opacity-90"
                 loading="lazy"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
               <div className="absolute inset-0 ring-1 ring-inset ring-white/5 rounded-3xl" />
 
               <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between">

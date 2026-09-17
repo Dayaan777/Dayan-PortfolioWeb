@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Dayan Khan' }],
   creator: 'Dayan Khan',
-  themeColor: '#050505',
+  themeColor: '#0a0a0a',
   openGraph: {
     type: 'website',
     url: siteUrl,

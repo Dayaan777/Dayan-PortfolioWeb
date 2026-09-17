@@ -1,11 +1,34 @@
 'use client';
 
-import { Suspense, useRef, useMemo } from 'react';
+import { Suspense, useRef, useMemo, useEffect, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, Environment, MeshTransmissionMaterial } from '@react-three/drei';
 import * as THREE from 'three';
 
-function CrystalShape() {
+// Helper to get CSS variable value safely
+function useThemeColors() {
+  const [colors, setColors] = useState({
+    background: '#0a0a0a',
+    accent: 'hsl(338, 50%, 24%)',
+    accentHover: 'hsl(338, 46%, 35%)'
+  });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const style = getComputedStyle(document.documentElement);
+    const getHsl = (varName: string) => `hsl(${style.getPropertyValue(varName).trim()})`;
+    
+    setColors({
+      background: getHsl('--background'),
+      accent: getHsl('--accent'),
+      accentHover: getHsl('--accent-hover')
+    });
+  }, []);
+
+  return colors;
+}
+
+function CrystalShape({ colors }: { colors: ReturnType<typeof useThemeColors> }) {
   const mesh = useRef<THREE.Mesh>(null);
 
   useFrame((state) => {
@@ -29,17 +52,17 @@ function CrystalShape() {
           distortion={0.25}
           distortionScale={0.3}
           temporalDistortion={0.1}
-          color="#A0284D"
-          attenuationColor="#7A1F3D"
+          color={colors.accent}
+          attenuationColor={colors.accentHover}
           attenuationDistance={1.5}
-          background={new THREE.Color('#050505')}
+          background={new THREE.Color(colors.background)}
         />
       </mesh>
     </Float>
   );
 }
 
-function GlassKnot() {
+function GlassKnot({ colors }: { colors: ReturnType<typeof useThemeColors> }) {
   const mesh = useRef<THREE.Mesh>(null);
   useFrame((state) => {
     if (!mesh.current) return;
@@ -51,7 +74,7 @@ function GlassKnot() {
       <mesh ref={mesh} scale={0.62} position={[-2.9, 1.3, -1.5]}>
         <torusKnotGeometry args={[0.8, 0.26, 180, 28]} />
         <meshStandardMaterial
-          color="#7A1F3D"
+          color={colors.accentHover}
           metalness={0.85}
           roughness={0.18}
           envMapIntensity={0.9}
@@ -61,7 +84,7 @@ function GlassKnot() {
   );
 }
 
-function FloatingParticle({ index }: { index: number }) {
+function FloatingParticle({ index, colors }: { index: number, colors: ReturnType<typeof useThemeColors> }) {
   const ref = useRef<THREE.Mesh>(null);
   const seed = useMemo(() => Math.random() * Math.PI * 2, []);
   const config = useMemo(() => {
@@ -84,16 +107,16 @@ function FloatingParticle({ index }: { index: number }) {
   return (
     <mesh ref={ref} position={[config.x, config.y, config.z]} scale={config.scale}>
       <sphereGeometry args={[1, 12, 12]} />
-      <meshBasicMaterial color="#A0284D" transparent opacity={0.55} />
+      <meshBasicMaterial color={colors.accent} transparent opacity={0.55} />
     </mesh>
   );
 }
 
-function ParticleField({ count = 70 }: { count?: number }) {
+function ParticleField({ count = 70, colors }: { count?: number, colors: ReturnType<typeof useThemeColors> }) {
   return (
     <group>
       {Array.from({ length: count }).map((_, i) => (
-        <FloatingParticle key={i} index={i} />
+        <FloatingParticle key={i} index={i} colors={colors} />
       ))}
     </group>
   );
@@ -112,6 +135,8 @@ function Rig({ children }: { children: React.ReactNode }) {
 }
 
 export default function Scene() {
+  const colors = useThemeColors();
+
   return (
     <Canvas
       camera={{ position: [0, 0, 7], fov: 42 }}
@@ -119,19 +144,19 @@ export default function Scene() {
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       style={{ pointerEvents: 'none' }}
     >
-      <color attach="background" args={['#050505']} />
-      <fog attach="fog" args={['#050505', 8, 18]} />
+      <color attach="background" args={[colors.background]} />
+      <fog attach="fog" args={[colors.background, 8, 18]} />
 
       <ambientLight intensity={0.35} />
       <spotLight position={[6, 8, 6]} angle={0.3} intensity={2.2} color="#ffffff" penumbra={1} />
-      <pointLight position={[-6, -4, -4]} intensity={1.4} color="#A0284D" />
+      <pointLight position={[-6, -4, -4]} intensity={1.4} color={colors.accent} />
       <pointLight position={[4, -6, 2]} intensity={0.8} color="#3E6B8E" />
 
       <Suspense fallback={null}>
         <Rig>
-          <CrystalShape />
-          <GlassKnot />
-          <ParticleField count={60} />
+          <CrystalShape colors={colors} />
+          <GlassKnot colors={colors} />
+          <ParticleField count={60} colors={colors} />
         </Rig>
         <Environment preset="studio" />
       </Suspense>

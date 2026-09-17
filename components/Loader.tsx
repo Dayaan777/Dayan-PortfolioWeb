@@ -36,7 +36,7 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
     <AnimatePresence>
       {!done && (
         <motion.div
-          className="fixed inset-0 z-[120] flex flex-col items-center justify-center bg-[#050505]"
+          className="fixed inset-0 z-[120] flex flex-col items-center justify-center bg-background"
           exit={{ opacity: 0, transition: { duration: 0.6, ease } }}
         >
           <div className="absolute inset-0 bg-grid mask-radial opacity-30" />
