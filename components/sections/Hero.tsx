@@ -34,7 +34,7 @@ export default function Hero() {
     <section
       id="hero-section"
       ref={ref}
-      className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden bg-[#ffffff] pt-24 pb-8 px-6 sm:px-10 md:px-14 lg:px-16"
+      className="sticky top-0 z-10 flex min-h-[100svh] flex-col justify-between overflow-hidden bg-[#ffffff] pt-24 pb-8 px-6 sm:px-10 md:px-14 lg:px-16"
     >
       {/* Top row: Availability badge left · Developer / Role label right */}
       <div className="relative z-30 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 w-full">
