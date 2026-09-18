@@ -24,7 +24,7 @@ export default function Home() {
       <Navbar />
 
       <main className="relative">
-        <div className="relative h-[200vh]">
+        <div className="relative h-[260vh]">
           <Hero />
           <About />
         </div>
