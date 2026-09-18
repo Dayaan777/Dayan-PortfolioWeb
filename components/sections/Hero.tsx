@@ -4,7 +4,6 @@ import { useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { FiArrowDown, FiDownload, FiArrowUpRight } from 'react-icons/fi';
-import MagneticButton from '@/components/MagneticButton';
 import { RESUME_URL } from '@/lib/site';
 
 const Scene = dynamic(() => import('@/components/Scene'), { ssr: false });
@@ -13,11 +12,11 @@ const ease = [0.22, 1, 0.36, 1] as const;
 
 const container = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.12, delayChildren: 0.3 } },
+  show: { transition: { staggerChildren: 0.08, delayChildren: 0.15 } },
 };
 const item = {
-  hidden: { opacity: 0, y: 26 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.9, ease } },
+  hidden: { opacity: 0, y: 40 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease } },
 };
 
 export default function Hero() {
@@ -27,106 +26,149 @@ export default function Hero() {
     offset: ['start start', 'end start'],
   });
   const yText = useTransform(scrollYProgress, [0, 1], [0, 140]);
-  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.94]);
+  const opacity = useTransform(scrollYProgress, [0, 0.65], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.96]);
 
   const scrollToWork = () =>
     document.querySelector('#work')?.scrollIntoView({ behavior: 'smooth' });
 
   return (
     <section
+      id="hero-section"
       ref={ref}
-      className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-5"
+      className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden bg-[#ebeae7] pt-24 pb-8 px-6 sm:px-10 md:px-14 lg:px-16"
     >
-      {/* 3D atmospheric background — z-0, scaled back so it reads as depth not focal shape */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0 scale-[0.72] opacity-80"
-        aria-hidden
-      >
-        <Scene />
+      {/* 3D Scene — z-20 so it directly overlaps the typography in the center */}
+      <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center" aria-hidden>
+        <Scene transparent />
       </div>
 
-      {/* Atmospheric overlays */}
-      <div className="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_center,transparent_30%,hsl(var(--background))_82%)]" />
-      <div className="pointer-events-none absolute inset-0 z-10 bg-grid opacity-[0.04]" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-32 bg-gradient-to-b from-background to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-40 bg-gradient-to-t from-background to-transparent" />
+      {/* Top subtle availability badge */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6, duration: 0.6, ease }}
+        className="relative z-10 flex items-center gap-2 self-start text-[11px] uppercase tracking-[0.2em] text-black/45"
+      >
+        <span className="relative flex h-2 w-2">
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-[#1fa89b]" />
+        </span>
+        <span>Available for select projects</span>
+      </motion.div>
 
+      {/* Center 3-Line Massive Stacked Typography */}
       <motion.div
         style={{ y: yText, opacity, scale }}
-        className="relative z-30 mx-auto flex max-w-4xl flex-col items-center text-center"
+        className="relative z-10 my-auto flex flex-col items-center justify-center py-6 select-none"
       >
-        <motion.div variants={container} initial="hidden" animate="show">
-          <motion.div
-            variants={item}
-            className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-[12px] text-foreground-secondary backdrop-blur-sm"
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="relative flex flex-col items-center"
+        >
+          {/* Subtle left indicator matching reference image */}
+          <span
+            className="absolute -left-6 sm:-left-10 md:-left-12 top-4 hidden sm:block font-mono text-xl font-bold text-black/35"
+            aria-hidden
           >
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-hover opacity-75" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent-hover" />
-            </span>
-            Available for select projects
-          </motion.div>
+            &lt;
+          </span>
 
+          {/* 3 Lines of Bold, Tightly-Stacked Headline */}
           <motion.h1
             variants={item}
-            className="relative flex flex-col items-center font-display text-5xl font-bold leading-[0.9] tracking-tight text-white sm:text-7xl md:text-8xl"
+            className="font-display font-black tracking-[-0.04em] leading-[0.82] text-[#0d0d0d] text-center"
+            style={{ fontSize: 'clamp(4.2rem, 14.5vw, 15rem)' }}
           >
-            <span>DAYAN</span>
-            <span>KHAN</span>
+            <span className="block">DAYAN</span>
+            <span className="block">KHAN</span>
+            <span className="block text-[#141414]">DEVELOPER</span>
           </motion.h1>
 
-          <motion.p
-            variants={item}
-            className="mt-6 text-sm uppercase tracking-[0.3em] text-foreground-secondary sm:text-base"
-          >
-            Full-Stack Developer · Frontend Engineer · UI/UX
-          </motion.p>
-
-          <motion.p
-            variants={item}
-            className="mx-auto mt-7 max-w-xl text-lg leading-relaxed text-white/75 text-balance sm:text-xl"
-          >
-            &ldquo;I build fast, modern and meaningful digital experiences.&rdquo;
-          </motion.p>
-
+          {/* Role + Quote + CTAs seamlessly integrated */}
           <motion.div
             variants={item}
-            className="mt-10 flex flex-wrap items-center justify-center gap-3"
+            className="mt-8 flex flex-col items-center text-center gap-4 max-w-2xl"
           >
-            <MagneticButton onClick={scrollToWork} variant="primary">
-              View Projects
-              <FiArrowUpRight className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </MagneticButton>
-            <MagneticButton href={RESUME_URL} variant="outline">
-              <FiDownload className="transition-transform group-hover:translate-y-0.5" />
-              Download Resume
-            </MagneticButton>
-            <MagneticButton href="#contact" variant="ghost" cursor="hover">
-              Contact Me
-            </MagneticButton>
+            <p className="text-[11px] sm:text-xs uppercase tracking-[0.28em] font-medium text-black/50">
+              Full-Stack Developer · Frontend Engineer · UI/UX
+            </p>
+
+            <p className="text-[13px] sm:text-sm leading-relaxed text-black/45 max-w-md italic">
+              &ldquo;I build fast, modern and meaningful digital experiences.&rdquo;
+            </p>
+
+            {/* CTAs */}
+            <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
+              <button
+                onClick={scrollToWork}
+                className="inline-flex items-center gap-2 rounded-full bg-[#0d0d0d] px-6 py-2.5 text-xs font-medium tracking-wide text-white transition-all hover:bg-black/80 hover:scale-[1.02] active:scale-95"
+              >
+                View Projects <FiArrowUpRight size={14} />
+              </button>
+              <a
+                href={RESUME_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-black/20 bg-black/[0.02] px-6 py-2.5 text-xs font-medium tracking-wide text-black/70 transition-all hover:bg-black/5 hover:text-black hover:border-black/35"
+              >
+                <FiDownload size={13} /> Resume
+              </a>
+              <a
+                href="#contact"
+                className="px-3 py-2 text-xs font-medium tracking-wide text-black/45 transition-colors hover:text-black"
+              >
+                Contact Me
+              </a>
+            </div>
           </motion.div>
         </motion.div>
       </motion.div>
 
-      {/* Scroll cue */}
-      <motion.button
-        onClick={scrollToWork}
+      {/* Bottom Utility Bar: Site name left, Scroll to explore right */}
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.4, duration: 1 }}
+        transition={{ delay: 1, duration: 0.8 }}
         style={{ opacity }}
-        className="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 flex-col items-center gap-2 text-foreground-secondary"
-        aria-label="Scroll to projects"
+        className="relative z-30 flex items-center justify-between pt-4"
       >
-        <span className="text-[10px] uppercase tracking-[0.3em]">Scroll</span>
-        <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease }}
+        <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.25em] text-black/40">
+          Dayan Khan
+        </span>
+
+        <button
+          onClick={scrollToWork}
+          aria-label="Scroll to explore projects"
+          className="group flex items-center gap-2 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.25em] text-black/40 transition-colors hover:text-black"
         >
-          <FiArrowDown size={16} />
-        </motion.div>
-      </motion.button>
+          <span>Scroll to explore</span>
+          <motion.span
+            animate={{ y: [0, 4, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+            className="inline-flex"
+          >
+            <FiArrowDown size={13} />
+          </motion.span>
+        </button>
+      </motion.div>
+
+      {/* Optional Right-Edge Vertical Badge (Matching reference image teal tag) */}
+      <div
+        className="pointer-events-none fixed right-0 top-1/2 z-40 -translate-y-1/2 hidden md:block"
+        aria-hidden
+      >
+        <div className="flex items-center justify-center rounded-l-md bg-[#1fa89b] px-1.5 py-4 shadow-sm">
+          <span
+            className="text-[8px] font-bold uppercase tracking-[0.22em] text-white"
+            style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+          >
+            Portfolio · 2026
+          </span>
+        </div>
+      </div>
     </section>
   );
 }
+

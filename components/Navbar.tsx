@@ -44,13 +44,13 @@ export default function Navbar() {
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed inset-x-0 top-0 z-[90] flex justify-center px-4 pt-4"
+        className="fixed inset-x-0 top-0 z-[90] flex justify-center px-4 pt-4 md:px-8"
       >
         <nav
-          className={`flex w-full max-w-5xl items-center justify-between rounded-2xl border px-4 py-2.5 transition-all duration-500 ${
+          className={`flex w-full items-center justify-between transition-all duration-500 ${
             scrolled
-              ? 'border-white/10 bg-background/80 backdrop-blur-xl'
-              : 'border-transparent bg-transparent'
+              ? 'max-w-5xl rounded-2xl border border-white/10 bg-background/80 px-4 py-2.5 backdrop-blur-xl shadow-2xl'
+              : 'max-w-7xl border-transparent bg-transparent px-2 py-4 md:px-6'
           }`}
         >
           <button
@@ -58,25 +58,41 @@ export default function Navbar() {
             className="group flex items-center gap-2.5"
             aria-label="Dayan Khan — home"
           >
-            <span className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-accent-hover to-accent text-sm font-bold text-white">
-              D
+            <span
+              className={`relative flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold transition-all duration-300 ${
+                scrolled
+                  ? 'bg-gradient-to-br from-accent-hover to-accent text-white'
+                  : 'border border-black/20 bg-black/5 text-black font-display'
+              }`}
+            >
+              DK
             </span>
-            <span className="font-display text-sm font-semibold tracking-tight text-white/90">
+            <span
+              className={`font-display text-sm font-semibold tracking-tight transition-colors duration-300 ${
+                scrolled ? 'text-white/90' : 'text-neutral-900'
+              }`}
+            >
               Dayan Khan
             </span>
           </button>
 
-          <div className="hidden items-center gap-1 md:flex">
+          <div className="hidden items-center gap-2 md:flex lg:gap-3">
             {links.map((l) => (
               <button
                 key={l.href}
                 onClick={() => go(l.href)}
-                className="relative rounded-lg px-3.5 py-2 text-[13px] text-foreground-secondary transition-colors hover:text-white"
+                className={`relative rounded-lg px-3.5 py-2 text-[12px] uppercase tracking-[0.2em] font-medium transition-colors ${
+                  scrolled
+                    ? 'text-foreground-secondary hover:text-white'
+                    : 'text-neutral-700 hover:text-black'
+                }`}
               >
                 {active === l.href.slice(1) && (
                   <motion.span
                     layoutId="nav-active"
-                    className="absolute inset-0 rounded-lg bg-white/5"
+                    className={`absolute inset-0 rounded-lg ${
+                      scrolled ? 'bg-white/5' : 'bg-black/[0.04]'
+                    }`}
                     transition={{ type: 'spring', stiffness: 400, damping: 32 }}
                   />
                 )}
@@ -87,13 +103,21 @@ export default function Navbar() {
 
           <button
             onClick={() => go('#contact')}
-            className="hidden rounded-lg bg-white px-4 py-2 text-[13px] font-medium text-black transition-transform hover:scale-[1.03] active:scale-95 md:block"
+            className={`hidden rounded-full px-5 py-2 text-[12px] font-medium tracking-wide transition-all hover:scale-[1.03] active:scale-95 md:block ${
+              scrolled
+                ? 'bg-white text-black'
+                : 'bg-[#0c0c0c] text-white hover:opacity-80'
+            }`}
           >
             Let&apos;s talk
           </button>
 
           <button
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-white md:hidden"
+            className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-colors md:hidden ${
+              scrolled
+                ? 'border-white/10 text-white'
+                : 'border-black/15 text-black bg-black/5'
+            }`}
             onClick={() => setOpen((o) => !o)}
             aria-label="Toggle menu"
           >
