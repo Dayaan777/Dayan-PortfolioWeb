@@ -66,6 +66,7 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
         display: ['var(--font-display)', 'var(--font-inter)', 'sans-serif'],
+        condensed: ['var(--font-condensed)', 'sans-serif'],
         mono: ['var(--font-mono)', 'monospace'],
       },
       keyframes: {

@@ -1,6 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter, Syne, JetBrains_Mono } from 'next/font/google';
+import { Inter, Syne, JetBrains_Mono, Oswald } from 'next/font/google';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -12,6 +12,13 @@ const display = Syne({
   subsets: ['latin'],
   weight: ['600', '700', '800'],
   variable: '--font-display',
+  display: 'swap',
+});
+
+const condensed = Oswald({
+  subsets: ['latin'],
+  weight: ['700'],
+  variable: '--font-condensed',
   display: 'swap',
 });
 
@@ -66,7 +73,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${display.variable} ${mono.variable}`}>
+    <html lang="en" className={`${inter.variable} ${display.variable} ${condensed.variable} ${mono.variable}`}>
       <body className="font-sans antialiased bg-background text-foreground">
         {children}
       </body>

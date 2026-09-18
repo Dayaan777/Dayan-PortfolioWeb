@@ -75,14 +75,14 @@ export default function Hero() {
             &lt;
           </span>
 
-          {/* 3 Lines of Bold, Tightly-Stacked Headline — Perfectly proportioned without overflow */}
+          {/* 3 Lines of Bold, Condensed Headline matching reference image */}
           <motion.h1
             variants={item}
-            className="flex flex-col items-center text-center font-display font-black leading-[0.82] tracking-[-0.035em] text-[#0d0d0d] w-full max-w-full"
+            className="flex flex-col items-center text-center font-condensed font-bold uppercase leading-[0.86] tracking-[-0.01em] text-[#0d0d0d] w-full max-w-full select-none"
           >
-            <span className="block text-[clamp(3.4rem,13vw,11.5rem)]">DAYAN</span>
-            <span className="block text-[clamp(3.4rem,13vw,11.5rem)]">KHAN</span>
-            <span className="block text-[clamp(1.9rem,7.2vw,6.5rem)] tracking-normal sm:tracking-[0.01em] text-[#111111]">
+            <span className="block text-[clamp(4.2rem,15vw,14rem)]">DAYAN</span>
+            <span className="block text-[clamp(4.2rem,15vw,14rem)]">KHAN</span>
+            <span className="block text-[clamp(2.4rem,8.6vw,8.2rem)] tracking-[0.03em] text-[#111111]">
               DEVELOPER
             </span>
           </motion.h1>

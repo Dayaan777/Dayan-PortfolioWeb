@@ -75,24 +75,22 @@ function GlassKnot({ colors, transparent = false }: { colors: ReturnType<typeof 
     <Float speed={1.1} rotationIntensity={0.22} floatIntensity={0.45}>
       <mesh
         ref={mesh}
-        scale={transparent ? 0.5 : 0.62}
+        scale={transparent ? 0.52 : 0.62}
         position={transparent ? [0, 0, 0] : [-2.9, 1.3, -1.5]}
       >
-        <torusKnotGeometry args={transparent ? [0.62, 0.17, 220, 32] : [0.8, 0.26, 180, 28]} />
+        <torusKnotGeometry args={transparent ? [0.65, 0.17, 240, 36] : [0.8, 0.26, 180, 28]} />
         {transparent ? (
-          <MeshTransmissionMaterial
-            transmission={0.97}
-            thickness={1.1}
-            roughness={0.03}
-            ior={1.48}
-            chromaticAberration={0.42}
-            anisotropy={0.35}
-            distortion={0.12}
-            distortionScale={0.2}
-            temporalDistortion={0.08}
+          <meshPhysicalMaterial
             color="#ffffff"
-            attenuationColor="#fef3c7"
-            attenuationDistance={1.8}
+            metalness={0.92}
+            roughness={0.06}
+            clearcoat={1.0}
+            clearcoatRoughness={0.04}
+            reflectivity={1.0}
+            iridescence={0.8}
+            iridescenceIOR={1.5}
+            iridescenceThicknessRange={[180, 500]}
+            envMapIntensity={2.8}
           />
         ) : (
           <meshStandardMaterial
@@ -174,13 +172,15 @@ export default function Scene({ transparent = false }: { transparent?: boolean }
       {transparent ? (
         <>
           <ambientLight intensity={0.65} />
-          <directionalLight position={[4, 6, 4]} intensity={1.5} color="#ffffff" />
+          {/* Main specular key light */}
+          <directionalLight position={[6, 9, 6]} intensity={2.8} color="#ffffff" />
+          <directionalLight position={[-6, -4, -3]} intensity={1.2} color="#ffffff" />
           {/* Soft warm amber highlight on left/top */}
-          <pointLight position={[-4.5, 3.2, 2.5]} intensity={2.8} color="#f59e0b" />
-          {/* Soft sky-blue highlight on right/bottom */}
-          <pointLight position={[4.5, -3.2, 2.2]} intensity={2.4} color="#38bdf8" />
-          {/* Subtle top rim highlight */}
-          <spotLight position={[0, 6.5, 4.5]} angle={0.4} intensity={1.3} color="#fffbeb" penumbra={1} />
+          <pointLight position={[-5, 4, 3]} intensity={4.5} color="#f59e0b" distance={15} />
+          {/* Soft cool azure/sky-blue highlight on right/bottom */}
+          <pointLight position={[5, -4, 3]} intensity={4.2} color="#06b6d4" distance={15} />
+          {/* Soft violet fill from below */}
+          <pointLight position={[0, -6, 2]} intensity={2.0} color="#3b82f6" distance={12} />
         </>
       ) : (
         <>
