@@ -101,38 +101,31 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Role Quote & Action Buttons */}
+          {/* Action Buttons */}
           <motion.div
             variants={item}
-            className="relative z-30 mt-6 sm:mt-8 flex flex-col items-center text-center gap-4 max-w-2xl"
+            className="relative z-30 mt-5 sm:mt-6 flex flex-wrap items-center justify-center gap-3"
           >
-            <p className="text-[13px] sm:text-sm leading-relaxed text-[#222222] max-w-md italic">
-              &ldquo;I build fast, modern and meaningful digital experiences.&rdquo;
-            </p>
-
-            {/* CTAs */}
-            <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
-              <button
-                onClick={scrollToWork}
-                className="inline-flex items-center gap-2 rounded-full bg-[#0d0d0d] px-6 py-2.5 text-xs font-medium tracking-wide text-white transition-all hover:bg-black/80 hover:scale-[1.02] active:scale-95"
-              >
-                View Projects <FiArrowUpRight size={14} />
-              </button>
-              <a
-                href={RESUME_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-[#0d0d0d]/30 bg-transparent px-6 py-2.5 text-xs font-medium tracking-wide text-[#0d0d0d] transition-all hover:bg-[#0d0d0d]/5 hover:border-[#0d0d0d] active:scale-95"
-              >
-                <FiDownload size={13} className="text-[#0d0d0d]" /> Resume
-              </a>
-              <a
-                href="#contact"
-                className="px-4 py-2.5 text-xs font-medium tracking-wide text-[#222222] rounded-full transition-colors hover:text-black hover:bg-[#0d0d0d]/5"
-              >
-                Contact Me
-              </a>
-            </div>
+            <button
+              onClick={scrollToWork}
+              className="inline-flex items-center gap-2 rounded-full bg-[#0d0d0d] px-6 py-2.5 text-xs font-medium tracking-wide text-white transition-all hover:bg-black/80 hover:scale-[1.02] active:scale-95"
+            >
+              View Projects <FiArrowUpRight size={14} />
+            </button>
+            <a
+              href={RESUME_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-[#0d0d0d]/30 bg-transparent px-6 py-2.5 text-xs font-medium tracking-wide text-[#0d0d0d] transition-all hover:bg-[#0d0d0d]/5 hover:border-[#0d0d0d] active:scale-95"
+            >
+              <FiDownload size={13} className="text-[#0d0d0d]" /> Resume
+            </a>
+            <a
+              href="#contact"
+              className="px-4 py-2.5 text-xs font-medium tracking-wide text-[#222222] rounded-full transition-colors hover:text-black hover:bg-[#0d0d0d]/5"
+            >
+              Contact Me
+            </a>
           </motion.div>
         </motion.div>
       </motion.div>
