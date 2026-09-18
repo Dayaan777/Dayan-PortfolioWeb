@@ -62,48 +62,53 @@ function CrystalShape({ colors }: { colors: ReturnType<typeof useThemeColors> })
   );
 }
 
-// Helper to generate high-contrast barber-pole / zebra diagonal striped texture
-function useStripedTexture() {
-  return useMemo(() => {
-    if (typeof document === 'undefined') return null;
-    const canvas = document.createElement('canvas');
-    canvas.width = 1024;
-    canvas.height = 512;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return null;
+// Synchronous procedural black-and-white barber-pole / zebra diagonal striped texture
+function createStripedTexture() {
+  const width = 512;
+  const height = 512;
+  const size = width * height;
+  const data = new Uint8Array(4 * size);
 
-    // Crisp white base
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, 1024, 512);
+  const stripePeriod = 64; // Period of stripe cycle (black + white)
+  const halfPeriod = 32;
 
-    // Bold deep black diagonal barber-pole stripes
-    ctx.fillStyle = '#080808';
-    const stripeWidth = 56;
-    const gap = 56;
-    const total = stripeWidth + gap;
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const idx = (y * width + x) * 4;
+      // Spiral coordinate along the tube surface
+      const coord = ((x + y * 1.8) % stripePeriod + stripePeriod) % stripePeriod;
 
-    for (let x = -512; x < 1536; x += total) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x + 512, 512);
-      ctx.lineTo(x + 512 + stripeWidth, 512);
-      ctx.lineTo(x + stripeWidth, 0);
-      ctx.closePath();
-      ctx.fill();
+      // Anti-aliased 2px transition between black and white
+      let t = 0;
+      if (coord < halfPeriod) {
+        t = Math.min(1, Math.max(0, coord / 2));
+      } else {
+        t = 1 - Math.min(1, Math.max(0, (coord - halfPeriod) / 2));
+      }
+
+      // High-contrast: 10 = deep obsidian black, 255 = crisp brilliant white
+      const val = Math.round(10 + t * (255 - 10));
+      data[idx] = val;
+      data[idx + 1] = val;
+      data[idx + 2] = val;
+      data[idx + 3] = 255;
     }
+  }
 
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(5, 1);
-    texture.needsUpdate = true;
-    return texture;
-  }, []);
+  const texture = new THREE.DataTexture(data, width, height, THREE.RGBAFormat);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(6, 1);
+  texture.generateMipmaps = true;
+  texture.minFilter = THREE.LinearMipmapLinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.needsUpdate = true;
+  return texture;
 }
 
 function GlassKnot({ colors, transparent = false }: { colors: ReturnType<typeof useThemeColors>; transparent?: boolean }) {
   const group = useRef<THREE.Group>(null);
-  const stripedTexture = useStripedTexture();
+  const stripedTexture = useMemo(() => (transparent ? createStripedTexture() : null), [transparent]);
 
   useFrame((state) => {
     if (!group.current) return;
@@ -121,35 +126,37 @@ function GlassKnot({ colors, transparent = false }: { colors: ReturnType<typeof 
       >
         {transparent ? (
           <>
-            {/* Inner core: bold black-and-white barber-pole striped pattern */}
-            {stripedTexture && (
-              <mesh renderOrder={1}>
-                <torusKnotGeometry args={[0.74, 0.16, 240, 36, 2, 3]} />
-                <meshStandardMaterial
-                  map={stripedTexture}
-                  roughness={0.25}
-                  metalness={0.05}
-                />
-              </mesh>
-            )}
+            {/* Core knot with bold black-and-white barber-pole striped pattern */}
+            <mesh>
+              <torusKnotGeometry args={[0.74, 0.19, 240, 36, 2, 3]} />
+              <meshPhysicalMaterial
+                map={stripedTexture ?? undefined}
+                roughness={0.12}
+                metalness={0.08}
+                clearcoat={1.0}
+                clearcoatRoughness={0.04}
+                transmission={0.25}
+                thickness={1.2}
+                ior={1.5}
+                envMapIntensity={2.0}
+              />
+            </mesh>
 
-            {/* Outer shell: clear/frosted glass transmission with refraction and chromatic dispersion */}
-            <mesh renderOrder={2}>
-              <torusKnotGeometry args={[0.74, 0.22, 240, 36, 2, 3]} />
-              <MeshTransmissionMaterial
-                transmission={0.93}
-                thickness={1.3}
-                roughness={0.11}
-                ior={1.52}
-                chromaticAberration={0.48}
-                anisotropy={0.25}
-                distortion={0.14}
-                distortionScale={0.22}
-                temporalDistortion={0.05}
+            {/* Outer clear/frosted glass envelope with chromatic edge fringing */}
+            <mesh>
+              <torusKnotGeometry args={[0.74, 0.23, 240, 36, 2, 3]} />
+              <meshPhysicalMaterial
+                transparent
+                opacity={0.38}
                 color="#ffffff"
-                attenuationColor="#fef8ee"
-                attenuationDistance={3.5}
-                background={new THREE.Color('#ebeae7')}
+                roughness={0.07}
+                clearcoat={1.0}
+                clearcoatRoughness={0.03}
+                reflectivity={1.0}
+                iridescence={0.9}
+                iridescenceIOR={1.5}
+                iridescenceThicknessRange={[180, 520]}
+                envMapIntensity={2.6}
               />
             </mesh>
           </>
