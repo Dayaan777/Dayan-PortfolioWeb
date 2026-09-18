@@ -106,7 +106,7 @@ export default function Hero() {
             variants={item}
             className="relative z-30 mt-6 sm:mt-8 flex flex-col items-center text-center gap-4 max-w-2xl"
           >
-            <p className="text-[13px] sm:text-sm leading-relaxed text-black/55 max-w-md italic">
+            <p className="text-[13px] sm:text-sm leading-relaxed text-[#222222] max-w-md italic">
               &ldquo;I build fast, modern and meaningful digital experiences.&rdquo;
             </p>
 
@@ -122,13 +122,13 @@ export default function Hero() {
                 href={RESUME_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-black/20 bg-black/[0.02] px-6 py-2.5 text-xs font-medium tracking-wide text-black/70 transition-all hover:bg-black/5 hover:text-black hover:border-black/35"
+                className="inline-flex items-center gap-2 rounded-full border border-[#0d0d0d]/30 bg-transparent px-6 py-2.5 text-xs font-medium tracking-wide text-[#0d0d0d] transition-all hover:bg-[#0d0d0d]/5 hover:border-[#0d0d0d] active:scale-95"
               >
-                <FiDownload size={13} /> Resume
+                <FiDownload size={13} className="text-[#0d0d0d]" /> Resume
               </a>
               <a
                 href="#contact"
-                className="px-3 py-2 text-xs font-medium tracking-wide text-black/50 transition-colors hover:text-black"
+                className="px-4 py-2.5 text-xs font-medium tracking-wide text-[#222222] rounded-full transition-colors hover:text-black hover:bg-[#0d0d0d]/5"
               >
                 Contact Me
               </a>
