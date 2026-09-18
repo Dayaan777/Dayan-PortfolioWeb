@@ -14,7 +14,7 @@ export default function About() {
           <span>02/05</span>
         </div>
 
-        <div className="grid gap-12 pb-20 pt-16 lg:grid-cols-[0.8fr_1.2fr] lg:items-end lg:gap-20 lg:pb-28 lg:pt-24">
+        <div className="grid gap-12 pb-20 pt-28 lg:grid-cols-[0.8fr_1.2fr] lg:items-end lg:gap-20 lg:pb-28 lg:pt-28">
           <h2 className="font-condensed text-[clamp(5.5rem,16vw,13rem)] font-bold uppercase leading-[0.78] tracking-[-0.05em] text-white">
             /ABOUT
           </h2>
