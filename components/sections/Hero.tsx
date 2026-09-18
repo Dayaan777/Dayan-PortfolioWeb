@@ -1,10 +1,13 @@
 'use client';
 
 import { useRef } from 'react';
+import dynamic from 'next/dynamic';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { FiArrowDown, FiDownload, FiArrowUpRight } from 'react-icons/fi';
 import MagneticButton from '@/components/MagneticButton';
 import { RESUME_URL } from '@/lib/site';
+
+const Scene = dynamic(() => import('@/components/Scene'), { ssr: false });
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -35,6 +38,14 @@ export default function Hero() {
       ref={ref}
       className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-5"
     >
+      {/* 3D atmospheric background — z-0, scaled back so it reads as depth not focal shape */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0 scale-[0.72] opacity-80"
+        aria-hidden
+      >
+        <Scene />
+      </div>
+
       {/* Atmospheric overlays */}
       <div className="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_center,transparent_30%,hsl(var(--background))_82%)]" />
       <div className="pointer-events-none absolute inset-0 z-10 bg-grid opacity-[0.04]" />
@@ -59,17 +70,10 @@ export default function Hero() {
 
           <motion.h1
             variants={item}
-            className="relative flex flex-col items-center font-display text-5xl font-bold leading-[0.82] tracking-tight text-white sm:text-7xl md:text-8xl"
+            className="relative flex flex-col items-center font-display text-5xl font-bold leading-[0.9] tracking-tight text-white sm:text-7xl md:text-8xl"
           >
-            <span className="relative z-20">DAYAN</span>
-            <span className="relative z-10 my-[-0.18em] flex h-24 w-20 overflow-hidden rounded-2xl border border-white/15 shadow-2xl shadow-black/50 sm:h-32 sm:w-28 md:h-44 md:w-36">
-              <img
-                src="/WhatsApp_Image_2026-07-24_at_12.34.43_AM.jpeg"
-                alt="Dayan Khan"
-                className="h-full w-full object-cover object-center"
-              />
-            </span>
-            <span className="relative z-20">KHAN</span>
+            <span>DAYAN</span>
+            <span>KHAN</span>
           </motion.h1>
 
           <motion.p
