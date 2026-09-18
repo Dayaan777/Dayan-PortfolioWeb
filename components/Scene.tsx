@@ -67,32 +67,32 @@ function GlassKnot({ colors, transparent = false }: { colors: ReturnType<typeof 
   useFrame((state) => {
     if (!mesh.current) return;
     const t = state.clock.getElapsedTime();
-    mesh.current.rotation.x = t * 0.12 + state.pointer.y * 0.35;
-    mesh.current.rotation.y = t * 0.16 + state.pointer.x * 0.45;
+    mesh.current.rotation.x = t * 0.09 + state.pointer.y * 0.22;
+    mesh.current.rotation.y = t * 0.13 + state.pointer.x * 0.3;
   });
 
   return (
-    <Float speed={1.2} rotationIntensity={0.35} floatIntensity={0.7}>
+    <Float speed={1.1} rotationIntensity={0.22} floatIntensity={0.45}>
       <mesh
         ref={mesh}
-        scale={transparent ? 0.95 : 0.62}
+        scale={transparent ? 0.5 : 0.62}
         position={transparent ? [0, 0, 0] : [-2.9, 1.3, -1.5]}
       >
-        <torusKnotGeometry args={[1.0, 0.32, 200, 32]} />
+        <torusKnotGeometry args={transparent ? [0.62, 0.17, 220, 32] : [0.8, 0.26, 180, 28]} />
         {transparent ? (
           <MeshTransmissionMaterial
-            transmission={0.92}
-            thickness={1.8}
-            roughness={0.06}
-            ior={1.4}
-            chromaticAberration={0.3}
+            transmission={0.97}
+            thickness={1.1}
+            roughness={0.03}
+            ior={1.48}
+            chromaticAberration={0.42}
             anisotropy={0.35}
-            distortion={0.2}
-            distortionScale={0.3}
-            temporalDistortion={0.1}
-            color="#f0f0f0"
-            attenuationColor="#111111"
-            attenuationDistance={2}
+            distortion={0.12}
+            distortionScale={0.2}
+            temporalDistortion={0.08}
+            color="#ffffff"
+            attenuationColor="#fef3c7"
+            attenuationDistance={1.8}
           />
         ) : (
           <meshStandardMaterial
@@ -171,10 +171,25 @@ export default function Scene({ transparent = false }: { transparent?: boolean }
       {!transparent && <color attach="background" args={[colors.background]} />}
       {!transparent && <fog attach="fog" args={[colors.background, 8, 18]} />}
 
-      <ambientLight intensity={transparent ? 0.7 : 0.35} />
-      <spotLight position={[6, 8, 6]} angle={0.3} intensity={transparent ? 3.0 : 2.2} color="#ffffff" penumbra={1} />
-      <pointLight position={[-6, -4, -4]} intensity={transparent ? 1.8 : 1.4} color={transparent ? '#ffffff' : colors.accent} />
-      <pointLight position={[4, -6, 2]} intensity={0.8} color="#3E6B8E" />
+      {transparent ? (
+        <>
+          <ambientLight intensity={0.65} />
+          <directionalLight position={[4, 6, 4]} intensity={1.5} color="#ffffff" />
+          {/* Soft warm amber highlight on left/top */}
+          <pointLight position={[-4.5, 3.2, 2.5]} intensity={2.8} color="#f59e0b" />
+          {/* Soft sky-blue highlight on right/bottom */}
+          <pointLight position={[4.5, -3.2, 2.2]} intensity={2.4} color="#38bdf8" />
+          {/* Subtle top rim highlight */}
+          <spotLight position={[0, 6.5, 4.5]} angle={0.4} intensity={1.3} color="#fffbeb" penumbra={1} />
+        </>
+      ) : (
+        <>
+          <ambientLight intensity={0.35} />
+          <spotLight position={[6, 8, 6]} angle={0.3} intensity={2.2} color="#ffffff" penumbra={1} />
+          <pointLight position={[-6, -4, -4]} intensity={1.4} color={colors.accent} />
+          <pointLight position={[4, -6, 2]} intensity={0.8} color="#3E6B8E" />
+        </>
+      )}
 
       <Suspense fallback={null}>
         <Rig>

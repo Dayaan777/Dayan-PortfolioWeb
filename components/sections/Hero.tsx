@@ -75,15 +75,16 @@ export default function Hero() {
             &lt;
           </span>
 
-          {/* 3 Lines of Bold, Tightly-Stacked Headline */}
+          {/* 3 Lines of Bold, Tightly-Stacked Headline — Perfectly proportioned without overflow */}
           <motion.h1
             variants={item}
-            className="font-display font-black tracking-[-0.04em] leading-[0.82] text-[#0d0d0d] text-center"
-            style={{ fontSize: 'clamp(4.2rem, 14.5vw, 15rem)' }}
+            className="flex flex-col items-center text-center font-display font-black leading-[0.82] tracking-[-0.035em] text-[#0d0d0d] w-full max-w-full"
           >
-            <span className="block">DAYAN</span>
-            <span className="block">KHAN</span>
-            <span className="block text-[#141414]">DEVELOPER</span>
+            <span className="block text-[clamp(3.4rem,13vw,11.5rem)]">DAYAN</span>
+            <span className="block text-[clamp(3.4rem,13vw,11.5rem)]">KHAN</span>
+            <span className="block text-[clamp(1.9rem,7.2vw,6.5rem)] tracking-normal sm:tracking-[0.01em] text-[#111111]">
+              DEVELOPER
+            </span>
           </motion.h1>
 
           {/* Role + Quote + CTAs seamlessly integrated */}
