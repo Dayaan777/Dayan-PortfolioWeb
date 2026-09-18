@@ -7,8 +7,8 @@ const tickerItems = ['Designing with intention', 'Building for the web', 'Dayan 
 
 export default function About() {
   return (
-    <section id="about" className="relative z-20 min-h-[100svh] overflow-hidden bg-black text-white">
-      <div className="flex min-h-[100svh] flex-col justify-between px-6 py-7 sm:px-10 sm:py-9 md:px-14 lg:px-16">
+    <section id="about" className="relative z-20 h-[calc(260vh-100vh)] min-h-[calc(260vh-100vh)] overflow-hidden bg-black text-white">
+      <div className="flex h-full flex-col justify-between px-6 py-7 sm:px-10 sm:py-9 md:px-14 lg:px-16">
         <div className="flex items-start justify-between text-[11px] uppercase tracking-[0.2em] text-white/45">
           <span>About</span>
           <span>02/05</span>
