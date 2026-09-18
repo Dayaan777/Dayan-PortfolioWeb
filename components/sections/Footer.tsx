@@ -66,7 +66,7 @@ export default function Footer() {
           transition={{ duration: 0.8 }}
           className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-white/[0.05] pt-7 text-center text-[12px] text-foreground-secondary/70 sm:flex-row sm:text-left"
         >
-          <p>© {new Date().getFullYear()} Dayan Khan. All rights reserved.</p>
+          <p>© <span suppressHydrationWarning>{new Date().getFullYear()}</span> Dayan Khan. All rights reserved.</p>
           <p>Designed & built with care.</p>
         </motion.div>
       </div>

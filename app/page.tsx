@@ -24,10 +24,12 @@ export default function Home() {
       <Navbar />
 
       <main className="relative">
-        <Hero />
+        <div className="relative h-[200vh]">
+          <Hero />
+          <About />
+        </div>
         <Marquee />
         <Projects />
-        <About />
         <Skills />
         <Timeline />
         <Contact />

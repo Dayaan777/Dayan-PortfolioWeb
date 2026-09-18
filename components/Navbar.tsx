@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FiMenu, FiX } from 'react-icons/fi';
 
 const links = [
-  { label: 'Work', href: '#work' },
   { label: 'About', href: '#about' },
+  { label: 'Work', href: '#work' },
   { label: 'Skills', href: '#skills' },
   { label: 'Journey', href: '#journey' },
   { label: 'Contact', href: '#contact' },
@@ -15,14 +15,14 @@ const links = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState('work');
+  const [active, setActive] = useState<string | null>(null);
 
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 40);
-      const sections = links.map((l) => l.href.slice(1));
-      let current = sections[0];
-      for (const id of sections) {
+      let current: string | null = null;
+      for (const link of links) {
+        const id = link.href.slice(1);
         const el = document.getElementById(id);
         if (el && el.getBoundingClientRect().top <= 120) current = id;
       }
@@ -35,6 +35,7 @@ export default function Navbar() {
 
   const go = (href: string) => {
     setOpen(false);
+    setActive(href.slice(1));
     document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
   };
 
