@@ -1,12 +1,9 @@
 'use client';
 
 import { useRef } from 'react';
-import dynamic from 'next/dynamic';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { FiArrowDown, FiDownload, FiArrowUpRight } from 'react-icons/fi';
 import { RESUME_URL } from '@/lib/site';
-
-const Scene = dynamic(() => import('@/components/Scene'), { ssr: false });
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -15,7 +12,7 @@ const container = {
   show: { transition: { staggerChildren: 0.08, delayChildren: 0.15 } },
 };
 const item = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 35 },
   show: { opacity: 1, y: 0, transition: { duration: 0.8, ease } },
 };
 
@@ -26,6 +23,7 @@ export default function Hero() {
     offset: ['start start', 'end start'],
   });
   const yText = useTransform(scrollYProgress, [0, 1], [0, 140]);
+  const yPhoto = useTransform(scrollYProgress, [0, 1], [0, 65]);
   const opacity = useTransform(scrollYProgress, [0, 0.65], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.96]);
 
@@ -36,67 +34,79 @@ export default function Hero() {
     <section
       id="hero-section"
       ref={ref}
-      className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden bg-[#ebeae7] pt-24 pb-8 px-6 sm:px-10 md:px-14 lg:px-16"
+      className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden bg-[#ffffff] pt-24 pb-8 px-6 sm:px-10 md:px-14 lg:px-16"
     >
-      {/* 3D Scene — z-20 so it directly overlaps the typography in the center */}
-      <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center" aria-hidden>
-        <Scene transparent />
+      {/* Top row: Availability badge left · Developer / Role label right */}
+      <div className="relative z-30 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 w-full">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.6, ease }}
+          className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-black/50"
+        >
+          <span className="relative flex h-2 w-2">
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-[#1fa89b]" />
+          </span>
+          <span>Available for select projects</span>
+        </motion.div>
+
+        <motion.p
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.6, ease }}
+          className="text-[11px] sm:text-xs uppercase tracking-[0.24em] font-medium text-black/50"
+        >
+          Developer · Full-Stack · Frontend · UI/UX
+        </motion.p>
       </div>
 
-      {/* Top subtle availability badge */}
+      {/* Centerpiece: 2-Line Massive Stacked Headline with Centered Layered Portrait Photo */}
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6, duration: 0.6, ease }}
-        className="relative z-10 flex items-center gap-2 self-start text-[11px] uppercase tracking-[0.2em] text-black/45"
-      >
-        <span className="relative flex h-2 w-2">
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-[#1fa89b]" />
-        </span>
-        <span>Available for select projects</span>
-      </motion.div>
-
-      {/* Center 3-Line Massive Stacked Typography */}
-      <motion.div
-        style={{ y: yText, opacity, scale }}
-        className="relative z-10 my-auto flex flex-col items-center justify-center py-6 select-none"
+        style={{ opacity, scale }}
+        className="relative z-10 my-auto flex flex-col items-center justify-center py-4 w-full select-none"
       >
         <motion.div
           variants={container}
           initial="hidden"
           animate="show"
-          className="relative flex flex-col items-center"
+          className="relative flex flex-col items-center w-full"
         >
-          {/* Subtle left indicator matching reference image */}
-          <span
-            className="absolute -left-6 sm:-left-10 md:-left-12 top-4 hidden sm:block font-mono text-xl font-bold text-black/35"
-            aria-hidden
-          >
-            &lt;
-          </span>
+          {/* Relative wrapper holding both the typography and the centered overlapping portrait */}
+          <div className="relative flex items-center justify-center w-full overflow-visible">
+            {/* Massive 2-Line Headline: DAYAN / KHAN extending towards viewport edges */}
+            <motion.h1
+              variants={item}
+              style={{ y: yText, fontSize: 'clamp(5.5rem, 21.5vw, 24rem)' }}
+              className="relative z-10 flex flex-col items-center text-center font-condensed font-bold uppercase leading-[0.8] tracking-[-0.03em] text-[#0a0a0a] w-full"
+            >
+              <span className="block w-full">DAYAN</span>
+              <span className="block w-full">KHAN</span>
+            </motion.h1>
 
-          {/* 3 Lines of Bold, Condensed Headline matching reference image */}
-          <motion.h1
-            variants={item}
-            className="flex flex-col items-center text-center font-condensed font-bold uppercase leading-[0.86] tracking-[-0.01em] text-[#0d0d0d] w-full max-w-full select-none"
-          >
-            <span className="block text-[clamp(4.2rem,15vw,14rem)]">DAYAN</span>
-            <span className="block text-[clamp(4.2rem,15vw,14rem)]">KHAN</span>
-            <span className="block text-[clamp(2.4rem,8.6vw,8.2rem)] tracking-[0.03em] text-[#111111]">
-              DEVELOPER
-            </span>
-          </motion.h1>
+            {/* Centered Portrait Photo overlapping/interrupting the typography */}
+            <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+              <motion.img
+                src="/images/hero/dayan-khan-portrait.png"
+                alt="Dayan Khan"
+                initial={{ filter: 'grayscale(100%)', opacity: 0, scale: 0.94 }}
+                animate={{ filter: 'grayscale(0%)', opacity: 1, scale: 1 }}
+                transition={{
+                  filter: { duration: 1.6, delay: 0.35, ease: [0.22, 1, 0.36, 1] },
+                  opacity: { duration: 0.8, delay: 0.15 },
+                  scale: { duration: 1.0, delay: 0.15, ease: [0.22, 1, 0.36, 1] },
+                }}
+                style={{ y: yPhoto }}
+                className="h-[320px] sm:h-[400px] md:h-[480px] lg:h-[540px] xl:h-[580px] w-auto max-w-none object-contain select-none drop-shadow-[0_20px_35px_rgba(0,0,0,0.18)]"
+              />
+            </div>
+          </div>
 
-          {/* Role + Quote + CTAs seamlessly integrated */}
+          {/* Role Quote & Action Buttons */}
           <motion.div
             variants={item}
-            className="mt-8 flex flex-col items-center text-center gap-4 max-w-2xl"
+            className="relative z-30 mt-6 sm:mt-8 flex flex-col items-center text-center gap-4 max-w-2xl"
           >
-            <p className="text-[11px] sm:text-xs uppercase tracking-[0.28em] font-medium text-black/50">
-              Full-Stack Developer · Frontend Engineer · UI/UX
-            </p>
-
-            <p className="text-[13px] sm:text-sm leading-relaxed text-black/45 max-w-md italic">
+            <p className="text-[13px] sm:text-sm leading-relaxed text-black/55 max-w-md italic">
               &ldquo;I build fast, modern and meaningful digital experiences.&rdquo;
             </p>
 
@@ -118,7 +128,7 @@ export default function Hero() {
               </a>
               <a
                 href="#contact"
-                className="px-3 py-2 text-xs font-medium tracking-wide text-black/45 transition-colors hover:text-black"
+                className="px-3 py-2 text-xs font-medium tracking-wide text-black/50 transition-colors hover:text-black"
               >
                 Contact Me
               </a>
@@ -131,7 +141,7 @@ export default function Hero() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 0.8 }}
+        transition={{ delay: 0.9, duration: 0.8 }}
         style={{ opacity }}
         className="relative z-30 flex items-center justify-between pt-4"
       >
@@ -155,7 +165,7 @@ export default function Hero() {
         </button>
       </motion.div>
 
-      {/* Optional Right-Edge Vertical Badge (Matching reference image teal tag) */}
+      {/* Right-Edge Vertical Badge (Matching reference image teal tag) */}
       <div
         className="pointer-events-none fixed right-0 top-1/2 z-40 -translate-y-1/2 hidden md:block"
         aria-hidden
