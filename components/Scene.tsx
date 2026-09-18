@@ -62,45 +62,109 @@ function CrystalShape({ colors }: { colors: ReturnType<typeof useThemeColors> })
   );
 }
 
+// Helper to generate high-contrast barber-pole / zebra diagonal striped texture
+function useStripedTexture() {
+  return useMemo(() => {
+    if (typeof document === 'undefined') return null;
+    const canvas = document.createElement('canvas');
+    canvas.width = 1024;
+    canvas.height = 512;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+
+    // Crisp white base
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, 1024, 512);
+
+    // Bold deep black diagonal barber-pole stripes
+    ctx.fillStyle = '#080808';
+    const stripeWidth = 56;
+    const gap = 56;
+    const total = stripeWidth + gap;
+
+    for (let x = -512; x < 1536; x += total) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x + 512, 512);
+      ctx.lineTo(x + 512 + stripeWidth, 512);
+      ctx.lineTo(x + stripeWidth, 0);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(5, 1);
+    texture.needsUpdate = true;
+    return texture;
+  }, []);
+}
+
 function GlassKnot({ colors, transparent = false }: { colors: ReturnType<typeof useThemeColors>; transparent?: boolean }) {
-  const mesh = useRef<THREE.Mesh>(null);
+  const group = useRef<THREE.Group>(null);
+  const stripedTexture = useStripedTexture();
+
   useFrame((state) => {
-    if (!mesh.current) return;
+    if (!group.current) return;
     const t = state.clock.getElapsedTime();
-    mesh.current.rotation.x = t * 0.09 + state.pointer.y * 0.22;
-    mesh.current.rotation.y = t * 0.13 + state.pointer.x * 0.3;
+    group.current.rotation.x = t * 0.08 + state.pointer.y * 0.2;
+    group.current.rotation.y = t * 0.12 + state.pointer.x * 0.28;
   });
 
   return (
-    <Float speed={1.1} rotationIntensity={0.22} floatIntensity={0.45}>
-      <mesh
-        ref={mesh}
-        scale={transparent ? 0.52 : 0.62}
+    <Float speed={1.1} rotationIntensity={0.2} floatIntensity={0.4}>
+      <group
+        ref={group}
+        scale={transparent ? 0.72 : 0.62}
         position={transparent ? [0, 0, 0] : [-2.9, 1.3, -1.5]}
       >
-        <torusKnotGeometry args={transparent ? [0.65, 0.17, 240, 36] : [0.8, 0.26, 180, 28]} />
         {transparent ? (
-          <meshPhysicalMaterial
-            color="#ffffff"
-            metalness={0.92}
-            roughness={0.06}
-            clearcoat={1.0}
-            clearcoatRoughness={0.04}
-            reflectivity={1.0}
-            iridescence={0.8}
-            iridescenceIOR={1.5}
-            iridescenceThicknessRange={[180, 500]}
-            envMapIntensity={2.8}
-          />
+          <>
+            {/* Inner core: bold black-and-white barber-pole striped pattern */}
+            {stripedTexture && (
+              <mesh renderOrder={1}>
+                <torusKnotGeometry args={[0.74, 0.16, 240, 36, 2, 3]} />
+                <meshStandardMaterial
+                  map={stripedTexture}
+                  roughness={0.25}
+                  metalness={0.05}
+                />
+              </mesh>
+            )}
+
+            {/* Outer shell: clear/frosted glass transmission with refraction and chromatic dispersion */}
+            <mesh renderOrder={2}>
+              <torusKnotGeometry args={[0.74, 0.22, 240, 36, 2, 3]} />
+              <MeshTransmissionMaterial
+                transmission={0.93}
+                thickness={1.3}
+                roughness={0.11}
+                ior={1.52}
+                chromaticAberration={0.48}
+                anisotropy={0.25}
+                distortion={0.14}
+                distortionScale={0.22}
+                temporalDistortion={0.05}
+                color="#ffffff"
+                attenuationColor="#fef8ee"
+                attenuationDistance={3.5}
+                background={new THREE.Color('#ebeae7')}
+              />
+            </mesh>
+          </>
         ) : (
-          <meshStandardMaterial
-            color={colors.accentHover}
-            metalness={0.85}
-            roughness={0.18}
-            envMapIntensity={0.9}
-          />
+          <mesh>
+            <torusKnotGeometry args={[0.8, 0.26, 180, 28]} />
+            <meshStandardMaterial
+              color={colors.accentHover}
+              metalness={0.85}
+              roughness={0.18}
+              envMapIntensity={0.9}
+            />
+          </mesh>
         )}
-      </mesh>
+      </group>
     </Float>
   );
 }
@@ -171,16 +235,14 @@ export default function Scene({ transparent = false }: { transparent?: boolean }
 
       {transparent ? (
         <>
-          <ambientLight intensity={0.65} />
-          {/* Main specular key light */}
-          <directionalLight position={[6, 9, 6]} intensity={2.8} color="#ffffff" />
-          <directionalLight position={[-6, -4, -3]} intensity={1.2} color="#ffffff" />
-          {/* Soft warm amber highlight on left/top */}
-          <pointLight position={[-5, 4, 3]} intensity={4.5} color="#f59e0b" distance={15} />
-          {/* Soft cool azure/sky-blue highlight on right/bottom */}
-          <pointLight position={[5, -4, 3]} intensity={4.2} color="#06b6d4" distance={15} />
-          {/* Soft violet fill from below */}
-          <pointLight position={[0, -6, 2]} intensity={2.0} color="#3b82f6" distance={12} />
+          <ambientLight intensity={0.75} />
+          {/* Crisp specular highlights */}
+          <directionalLight position={[5, 8, 6]} intensity={2.0} color="#ffffff" />
+          <directionalLight position={[-5, -4, -3]} intensity={1.0} color="#ffffff" />
+          {/* Subtle warm amber rim accent */}
+          <pointLight position={[-4.5, 3.5, 2.5]} intensity={1.8} color="#f59e0b" distance={12} />
+          {/* Subtle cool azure rim accent */}
+          <pointLight position={[4.5, -3.5, 2.2]} intensity={1.6} color="#06b6d4" distance={12} />
         </>
       ) : (
         <>
