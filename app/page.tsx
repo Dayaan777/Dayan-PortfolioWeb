@@ -6,7 +6,6 @@ import Loader from '@/components/Loader';
 import Cursor from '@/components/Cursor';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/sections/Hero';
-import Marquee from '@/components/sections/Marquee';
 import Projects from '@/components/sections/Projects';
 import About from '@/components/sections/About';
 import Skills from '@/components/sections/Skills';
@@ -28,7 +27,6 @@ export default function Home() {
           <Hero />
           <About />
         </div>
-        <Marquee />
         <Projects />
         <Skills />
         <Timeline />
